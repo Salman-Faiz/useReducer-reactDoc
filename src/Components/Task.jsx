@@ -2,39 +2,48 @@
 
 import { useState } from 'react'
 
-const Task = ({ task,onDeleteTask,onChangeTask }) => {
+const Task = ({ task, onDeleteTask, onChangeTask }) => {
   const [isEditing, setIsEditing] = useState(false)
 
   let taskContent
   if (isEditing) {
     taskContent = (
       <>
-        <input value={task.text} onChange={(e)=>{
+        <input
+          value={task.text}
+          onChange={e => {
             onChangeTask({
-                ...task,
-                text:e.target.value
+              ...task,
+              text: e.target.value,
             })
-        }} />
-        <button onClick={()=>setIsEditing(false)}>Save</button>
+          }}
+        />
+        <button onClick={() => setIsEditing(false)}>Save</button>
       </>
     )
   } else {
     taskContent = (
       <>
         {task.text}
-        <button onClick={()=>setIsEditing(true)}>Edit</button>
+        <button onClick={() => setIsEditing(true)}>Edit</button>
       </>
     )
   }
   return (
     <li>
       <label>
-        <input type='checkbox' checked={task.done} onChange={(e)=>{onChangeTask({
-            ...task,
-            done:e.target.checked
-        })}} />
+        <input
+          type='checkbox'
+          checked={task.done}
+          onChange={e => {
+            onChangeTask({
+              ...task,
+              done: e.target.checked,
+            })
+          }}
+        />
         {taskContent}
-        <button onClick={()=>onDeleteTask(task.id)}>Delete</button>
+        <button onClick={() => onDeleteTask(task.id)}>Delete</button>
       </label>
     </li>
   )

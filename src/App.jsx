@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useReducer, useState } from 'react'
 import AddTask from './Components/AddTask'
 import TaskList from './Components/TaskList'
 import { initialTasks } from './data/tasks'
+import taskReducer from './reducer/task-reducer';
 
 const App = () => {
-  const [tasks, setTasks] = useState(initialTasks)
+  // const [tasks, setTasks] = useState(initialTasks)
+  const [tasks, dispatch] = useReducer(taskReducer,initialTasks)
 
   const getNextId = taskData => {
     const maxId = taskData.reduce((previous, current) =>
@@ -15,29 +17,44 @@ const App = () => {
 
   // handlers
   const handleAddTask = taskText => {
-    setTasks([
-      ...tasks,
-      {
-        id: getNextId(tasks),
-        text: taskText,
-        done: false,
-      },
-    ])
+    // setTasks([
+    //   ...tasks,
+    //   {
+    //     id: getNextId(tasks),
+    //     text: taskText,
+    //     done: false,
+    //   },
+    // ])
+
+    // using reducer to handle this
+    dispatch({
+      type:"added",
+      text:taskText,
+      id:getNextId(tasks)
+    })
   }
 
   const handleChangeTask = task => {
-    const nextTask = tasks.map(t => {
-      if (t.id === task.id) {
-        return task
-      } else {
-        return t
-      }
+    // const nextTask = tasks.map(t => {
+    //   if (t.id === task.id) {
+    //     return task
+    //   } else {
+    //     return t
+    //   }
+    // })
+    // setTasks(nextTask)
+    dispatch({
+      type: "changed",
+      task
     })
-    setTasks(nextTask)
   }
 
   const handleDeleteTask = (taskId) =>{
-    setTasks(tasks.filter(t => t.id !== taskId))
+    // setTasks(tasks.filter(t => t.id !== taskId))
+    dispatch({
+      type:"deleted",
+      id:taskId
+    })
   }
 
   return (
